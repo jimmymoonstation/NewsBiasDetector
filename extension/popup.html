@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Extension</title>
+    <style>
+        body {
+            width: 600px; /* Adjusted width to 600px */
+            height: auto; /* Automatic height based on content */
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        #score, #result, #data {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<button id="fetchGPT">GPT</button>
+<button id="fetchClaude">Claude</button>
+<button id="fetchGemini">Gemini</button>
+<div id="model">Select your model</div>
+<!--<div id="score"></div>-->
+<div id="result"></div>
+<script src="popup.js"></script>
+</body>
+</html>
