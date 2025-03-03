@@ -8,6 +8,7 @@ import google.generativeai as genai
 import anthropic
 from openai import OpenAI
 from keys import *
+from kafka import KafkaProducer
 
 # 🔹 Initialize AI Models
 os.environ["OPENAI_API_KEY"] = OPENAIKEY
@@ -22,6 +23,7 @@ gemini = genai.GenerativeModel("gemini-1.5-flash")
 # 🔹 Kafka Configuration (Ensure Kafka is in KRaft Mode)
 KAFKA_BROKER = "localhost:9092"
 TOPIC_NAME = "news_articles"
+OUTPUT_TOPIC = "processed_news_results"  # New topic for the processed results
 
 # 🔹 Initialize Spark Session
 spark = SparkSession.builder \
@@ -29,7 +31,8 @@ spark = SparkSession.builder \
     .config("spark.sql.streaming.schemaInference", "true") \
     .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.1").getOrCreate()  # Use the correct version for your setup
 
-
+# 🔹 Initialize Kafka Producer
+producer = KafkaProducer(bootstrap_servers=KAFKA_BROKER, value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 # 🔹 Define Schema for Incoming Kafka Data
 schema = StructType([
@@ -98,25 +101,40 @@ def process_article(batch_df, batch_id):
             score = parse_score(result)
             print(f"\n📰 Processed Article: {url}\n🔹 Bias Score: {score}\n")
 
+            # Prepare the result to send to Kafka
+            result_data = {
+                "url": url,
+                "model": model,
+                "result": result,
+                "bias_score": score
+            }
+
+            # Send the processed result to the Kafka topic
+            producer.send(OUTPUT_TOPIC, value=result_data)
+            print(f"📤 Sent result to Kafka topic: {OUTPUT_TOPIC}")
+
+# Kafka Configuration for Reading Input
 kafka_options = {
     "kafka.bootstrap.servers": KAFKA_BROKER,  # Replace with your Kafka broker
     "subscribe": TOPIC_NAME,               # Replace with your Kafka topic
-    "startingOffsets": "earliest"                 # Optionally define how to start consuming messages
+    "startingOffsets": "earliest"           # Optionally define how to start consuming messages
 }
 
+# Read Streaming Data from Kafka
 df = spark.readStream \
     .format("kafka") \
     .options(**kafka_options) \
     .load()
 
-
+# Parse the Kafka data and apply schema
 parsed_df = df.selectExpr("CAST(value AS STRING)") \
     .select(from_json(col("value"), schema).alias("data")) \
     .select("data.*")
 
-# 🔹 Use foreachBatch to process each batch of incoming data
+# Use foreachBatch to process each batch of incoming data
 query = parsed_df.writeStream \
     .foreachBatch(process_article) \
     .start()
 
+# Await termination
 query.awaitTermination()

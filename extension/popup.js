@@ -1,5 +1,5 @@
-//const server = 'http://127.0.0.1:5000/api/scrape'
-const server = "https://newsbias-detect-tool-96460072068.us-central1.run.app/api/scrape";
+const server = 'http://127.0.0.1:5000/api/scrape'
+//const server = "https://newsbias-detect-tool-96460072068.us-central1.run.app/api/scrape";
 
 // Function to fetch data from the backend
 async function fetchData(model) {

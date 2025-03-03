@@ -8,217 +8,84 @@ import os
 import google.generativeai as genai
 from keys import *
 import json
-# from keys import OPENAIKEY, ANTHROPIC_API_KEY
+from kafka import KafkaProducer
 
-
-## Initilize Models
-# GPT
+# 🔹 Initialize AI Models
 os.environ["OPENAI_API_KEY"] = OPENAIKEY
 gpt = OpenAI()
 
-# Claude
 os.environ["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
 claude = anthropic.Anthropic()
 
-# Gemini
 genai.configure(api_key=GEMINI_KEY)
 gemini = genai.GenerativeModel("gemini-1.5-flash")
 
-def parse_score(result):
-    try:
-        bias_score = float(result.split('!$*_&')[-2])
-        return bias_score
-    except:
-        return -999
+# 🔹 Kafka Configuration
+KAFKA_BROKER = 'localhost:9092'
+TOPIC_NAME = 'news_articles'
 
+producer = KafkaProducer(
+    bootstrap_servers=KAFKA_BROKER,
+    value_serializer=lambda v: json.dumps(v).encode('utf-8')
+)
 
-def rate(news_content, model, temperature):
-    prompt = f"""
-    You are an AI trained to evaluate political bias in news articles. 
-    
-    Please analyze the news content below and give a political bias score based on the content. Do not consider the source or any other context, only the content itself.
-    
-    1. Explanation: explain the reasoning in bullet points. Be objective, and logical in your explanation.
-    
-    2. Bias Score: Based on the explanation, provide a score between -2 and 2:
-       - -2 = Far-left bias
-       - 2 = Far-right bias
-       - 0 = Neutral (no bias)
-       Please wrap the score between !$*_& sign like this !$*_&score!$*_&
-       
-    
-    Here is the news content:
-    \"\"\"{news_content}\"\"\"
-    
-    Please evaluate the content and output only the score following the reasons. Do not use any formatting like **.
-    
-    """
-    if model == 'claude':
-        message = claude.messages.create(
-            model="claude-3-5-sonnet-20240620",
-            max_tokens=1000,
-            temperature=temperature,
-            # system="You are an assistant to determine political bias of websites.",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": prompt
-                        }
-                    ]
-                }
-            ]
-        )
-        return prompt,message.content[0].text
-    elif model == 'gpt':
-
-        completion = gpt.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                # {"role": "system", "content": "You are an assistant to determine political bias of websites."},
-                {
-                    "role": "user",
-                    "content": prompt
-
-                }
-            ],
-            temperature=temperature,  # Set to 0 for deterministic output
-            top_p=1,        # Default value
-            n=1
-        )
-        # compute entropy
-        return prompt, completion.choices[0].message.dict()['content']
-
-    elif model == 'gemini':
-
-        response = gemini.generate_content(prompt,
-                                           generation_config=genai.types.GenerationConfig(
-                                               # Only one candidate for now.
-                                               # candidate_count=1,
-                                               # stop_sequences=["x"],
-                                               # max_output_tokens=20,
-                                               temperature=temperature,
-                                           ),
-                                           )
-        return prompt, response.text
-
-
-class Rater:
-    def __init__(self):
-        self.rate = None
-    def rate(self):
-        pass
-    def set_rater(self, name):
-        if name == 'gpt':
-            self.rate = self.rate_gpt
-
-        elif name == 'claude':
-            self.rate = self.rate_claude
-    def rate_gpt(self, news_content):
-        client = OpenAI()
-        completion = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": "You are an assistant to determine the political bias in news content."},
-                {
-                    "role": "user",
-                    "content": "carefully evaluate that whether this content political is biased?"
-                               "Don't consider the source of the news. pretend you don't know about it."
-                               "output -2~2 from far left to far right political biased, 0 for non-biased"
-                               "Please output in this format, strictly:"
-                               "Score: score"
-                               "Reasons: (in short bullet point)"
-                               f"""{news_content}"""
-                }
-            ],
-            temperature=0,  # Set to 0 for deterministic output
-            top_p=1,        # Default value
-            n=1
-        )
-        # compute entropy
-        return completion.choices[0].message.dict()['content']
-    def rate_claude(self, news_content):
-        client = anthropic.Anthropic()
-
-        message = client.messages.create(
-            model="claude-3-5-sonnet-20240620",
-            max_tokens=1000,
-            temperature=0,
-            system="You are an assistant to determine political bias of websites.",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "carefully evaluate that whether this content political is biased?"
-                                    "Don't consider the source of the news. pretend you don't know about it."
-                                    "output -2~2 from far left to far right political biased, 0 for non-biased"
-                                    "Please output in this format, strictly:"
-                                    "Score: score"
-                                    "Reasons: (in short bullet point)"
-                                    f"""{news_content}"""
-                        }
-                    ]
-                }
-            ]
-        )
-        return message.content[0].text
-
-
-def identify_source(url):
-    if "www.cnn.com" in url:
-        return 'cnn'
-    elif "www.foxnews.com" in url:
-        return 'foxnews'
-    elif "abcnews.go.com" in url:
-        return "abcnews"
-
+# 🔹 Flask App Setup
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+# 🔹 Identify News Source
+def identify_source(url):
+    if "cnn.com" in url:
+        return 'cnn'
+    elif "foxnews.com" in url:
+        return 'foxnews'
+    elif "abcnews.go.com" in url:
+        return "abcnews"
+    else:
+        return "unknown"
+
+# 🔹 Extract Article Text Based on Source
+def extract_article_text(soup, source):
+    if source == 'cnn':
+        paragraphs = soup.find_all('div', class_='article__content-container')
+    elif source == 'foxnews':
+        paragraphs = soup.find_all('div', class_='article-body')
+    elif source == 'abcnews':
+        paragraphs = soup.find_all('p')
+    else:
+        paragraphs = soup.find_all('p')  # Fallback for unknown sources
+
+    return "\n".join([para.get_text(strip=True) for para in paragraphs if para.get_text(strip=True)])
+
+# 🔹 Route for Scraping News Articles
 @app.route('/api/scrape', methods=['POST'])
 def scrape_page():
-    data = request.get_json()  # Get the JSON data from the request
-    url = data.get('url')  # Extract the URL from the JSON
-    model = data.get('model')
+    data = request.get_json()
+    url = data.get('url')
+    model = data.get('model', 'gpt')  # Default to GPT if no model is specified
+
     if not url:
         return jsonify({'error': 'No URL provided'}), 400
 
     try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for bad responses
-
-        # Parse the content using BeautifulSoup
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
         soup = BeautifulSoup(response.content, 'html.parser')
-
-        # The article content is usually within <div> or <section> tags with specific classes.
-        # For CNN, let's focus on <div> with class "l-container" or individual <p> tags for paragraphs.
         source = identify_source(url)
-        if source == 'cnn':
-            paragraphs = soup.find_all('div', class_='article__content-container')
-        elif source == 'foxnews':
-            paragraphs = soup.find_all('div', class_='article-body')
-        elif source == 'abcnews':
-            paragraphs = soup.find_all('p')
-        # Collect and join all paragraphs
-        article_text = "\n".join([para.get_text(strip=True) for para in paragraphs])
-        rater = Rater()
-        rater.set_rater(model)
-        _, result = rate(article_text, model, 0)
+        article_text = extract_article_text(soup, source)
 
-        score = parse_score(result)
-        print(result)
-        result = result.replace('!$*_&','')
-        return jsonify({
-            'result': result,
-            'score': score
-        })
+        if not article_text.strip():
+            return jsonify({'error': 'No content extracted from the article'}), 400
 
+        # Publish to Kafka for processing
+        producer.send(TOPIC_NAME, {'url': url, 'content': article_text, 'model': model})
+        return jsonify({'message': 'Article sent for processing', 'source': source}), 202
+
+    except requests.Timeout:
+        return jsonify({'error': 'Request timed out'}), 504
     except requests.RequestException as e:
         return jsonify({'error': str(e)}), 500
 
+# 🔹 Run Flask App
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=5000, debug=True)
