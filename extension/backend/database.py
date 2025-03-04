@@ -6,7 +6,7 @@ import json
 consumer = KafkaConsumer(
     'processed_news_results',  # Kafka topic name
     bootstrap_servers=['localhost:9092'],
-    group_id='news-bias-group',
+    # group_id='news-bias-group',  # This ensures the consumer starts reading from the earliest offset
     auto_offset_reset='earliest'
 )
 
@@ -14,9 +14,9 @@ consumer = KafkaConsumer(
 def connect_to_db():
     return psycopg2.connect(
         host="localhost",
-        database="news_bias_db",  # Replace with your database name
-        user="your_user",          # Replace with your DB username
-        password="your_password"   # Replace with your DB password
+        database="news_bias_detector",  # Replace with your database name
+        user="jimmy",          # Replace with your DB username
+        password="b07505024"   # Replace with your DB password
     )
 
 # Function to Insert Data into DB
@@ -44,6 +44,5 @@ for message in consumer:
     model = message_value['model']
     result = message_value['result']
     score = message_value['score']
-
     # Insert the message data into the database
     insert_into_db(url, model, result, score)
