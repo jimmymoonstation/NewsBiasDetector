@@ -106,7 +106,7 @@ def process_article(batch_df, batch_id):
                 "url": url,
                 "model": model,
                 "result": result,
-                "bias_score": score
+                "score": score
             }
 
             # Send the processed result to the Kafka topic
