@@ -1,0 +1,905 @@
+# First Round
+
+# Tell me about yourself
+
+Now: Second year master at UIUC studying information science. I have over five years of experience coding in Python. Starting from my undergrad, I focus more on data science and machine learning techniques. I mostly use Python for data processing with libraries like numpy, pandas, and use scikit-learn and PyTorch to build models.
+
+Starting my master in US, I try to focus more on data engineering skills. For example, I took courses in using Cloud Platforms and database administration. last summer, when I was doing my internship with Camping world. I built a data pipeline from scratch using the dataflow and cloud function features on GCP. this help my team to save 80% of the cost. Right now I’m developing my side project, using AI agents to evaluate news bias. In my system, I used distributed skills like kafka, spark, and kubernetes to increase fault tolerance.
+
+I believe my skill set and experience is great use of Canonical and is willing to contribute to the open source community. and, that’s it! thanks for your time.
+
+“I’m currently in my second year of a Master’s program in Information Science at UIUC, building upon over five years of Python programming experience. My journey began during my undergraduate studies, where I focused on data science and machine learning techniques. I’ve extensively used Python for data processing, leveraging libraries such as NumPy and pandas, and have built models using scikit-learn and PyTorch.
+Since starting my Master’s in the US, I’ve expanded my focus to include data engineering skills. I’ve taken courses in cloud platforms and database administration to broaden my expertise. Last summer, during my internship at Camping World, I designed and implemented a data pipeline from the ground up using Google Cloud Platform’s Dataflow and Cloud Functions. This project resulted in an impressive 80% cost reduction for my team.
+Currently, I’m developing a side project that uses AI agents to evaluate news bias. This system incorporates distributed technologies like Kafka, Spark, and Kubernetes to enhance fault tolerance and scalability.
+I believe my diverse skill set and experience would be valuable to Canonical, and I’m eager to contribute to the open-source community. Thank you for your time.”
+
+Questions
+
+1. “Could you tell me about the primary tools and technologies that are most frequently used in this role at Canonical? I’m particularly interested in understanding the day-to-day technical environment.”
+2. “Canonical is known for its remote-first culture. Could you share some insights into how the company facilitates effective remote work, and what a typical day looks like for someone in this position?”
+3. “In your experience, what are the most significant challenges or complexities associated with this role? I’m interested in understanding both the technical and collaborative aspects that might be particularly demanding.”
+
+# Canonical
+
+1. use lxd to create a vm on linux
+2. run juju in the vm
+3. install mysql juju
+
+https://github.com/canonical/mysql-operator
+
+Juju
+
+LXD
+
+[Canonical LXD | Canonical](https://canonical.com/lxd)
+
+automation
+
+CI/CD
+https://charmhub.io/mysql-k8s/docs/t-overview
+
+# Python
+
+Here are concise answers to the basic PySpark questions:
+
+📍 What is PySpark, and how is it different from Apache Spark?
+PySpark is the Python API for Apache Spark, allowing Python developers to use Spark's distributed computing capabilities. While Apache Spark is primarily written in Scala, PySpark enables Python programmers to leverage Spark's power using familiar Python syntax[1][5].
+
+📍 How do you initialize a SparkSession in PySpark?
+A SparkSession is typically initialized using:
+
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("MyApp").getOrCreate()
+
+
+📍 What are RDDs in PySpark, and how are they created?
+RDDs (Resilient Distributed Datasets) are the fundamental data structure in Spark. They can be created from external data sources or by parallelizing existing Python collections.
+
+📍 Explain transformations and actions in RDDs.
+Transformations create new RDDs from existing ones (e.g., map, filter), while actions return results to the driver program or write data to storage (e.g., collect, count).
+
+📍 What is a DataFrame in PySpark, and how does it differ from an RDD?
+DataFrames are distributed collections of data organized into named columns, similar to tables in relational databases. Unlike RDDs, DataFrames have a schema and offer more optimized operations[6].
+
+📍 How do you perform basic operations on DataFrames in PySpark?
+Basic operations include selecting columns, filtering rows, and performing aggregations. For example:
+
+df.select("column_name").filter(df.column > value).groupBy("column").count()
+
+
+📍 What is SparkSQL, and how do you perform SQL operations on DataFrames?
+SparkSQL allows you to run SQL queries on DataFrames. You can register a DataFrame as a temporary table and then use SQL syntax:
+
+df.createOrReplaceTempView("table_name")
+result = spark.sql("SELECT * FROM table_name WHERE condition")
+
+
+📍 How do you read and write data in different formats (CSV, JSON, Parquet) using PySpark?
+PySpark provides methods to read and write various formats:
+
+df = spark.read.csv("file.csv")
+df = spark.read.json("file.json")
+df = spark.read.parquet("file.parquet")
+df.write.csv("output.csv")
+
+
+📍 What is lazy evaluation in PySpark, and why is it important?
+Lazy evaluation means that transformations are not executed immediately but are recorded. This allows Spark to optimize the execution plan, improving performance for large-scale data processing.
+
+📍 Explain the role of caching and persistence in PySpark.
+Caching and persistence allow you to store intermediate computation results in memory or on disk, which can significantly speed up iterative algorithms and interactive data exploration by avoiding recomputation.
+
+Sources
+[1] Apache Spark vs PySpark: What are the differences? - StackShare https://stackshare.io/stackups/pyspark-vs-spark
+[2] A Comprehensive Guide to Operations in PySpark DataFrames https://www.sparkcodehub.com/pyspark-dataframe-operations
+[3] What are the differences between PySpark and Spark - Intellipaat https://intellipaat.com/blog/what-are-the-differences-between-pyspark-and-spark/
+[4] Spark DataFrame Operations | PySpark Tutorial for Beginners https://www.youtube.com/watch?v=ragDjDfwWGM
+[5] PySpark vs. Spark: 7 Key Differences and How to Choose https://granulate.io/blog/pyspark-vs-spark-7-key-differences-how-to-choose/
+[6] Quickstart: DataFrame — PySpark 3.5.5 documentation https://spark.apache.org/docs/latest/api/python/getting_started/quickstart_df.html
+[7] Apache Spark + Python = PySpark ? Know the differences ... - LinkedIn https://www.linkedin.com/pulse/apache-spark-python-pyspark-know-differences-building-ramesh-25c0c
+[8] A Complete Guide to PySpark DataFrames - Built In https://builtin.com/data-science/pyspark-dataframe
+
+[Python/Python Coding Interview Prep/Python Coding Interview Questions (Beginner to Advanced).md at master · Tanu-N-Prabhu/Python](https://github.com/Tanu-N-Prabhu/Python/blob/master/Python%20Coding%20Interview%20Prep/Python%20Coding%20Interview%20Questions%20(Beginner%20to%20Advanced).md)
+
+Let me explain the Python object initialization sequence:
+
+In Python, when creating a new object, the sequence is:
+
+1. __new__ is called first to create the instance
+2. Then __init__ is called to initialize that instance
+
+Therefore option A is correct: The __init__ method is called after the __new__ method is invoked during object construction.
+
+To illustrate:
+
+class Example:
+    def __new__(cls):
+        print("1. __new__ called")
+        instance = super().__new__(cls)
+        return instance
+
+    def __init__(self):
+        print("2. __init__ called")
+
+# When we create an object:
+obj = Example()
+# Output:
+# 1. __new__ called
+# 2. __init__ called
+
+
+The __new__ method creates and returns the instance, and then __init__ initializes it. This order is fixed and cannot be changed - __init__ will always be called after __new__ during object construction.
+
+*Using Decorators in Code*
+
+Here is the Python code:
+
+from functools import wraps
+
+# 1. Basic Decorator
+def my_decorator(func):
+    @wraps(func)  # Ensures the original function's metadata is preserveddef wrapper(*args, **kwargs):
+        print('Something is happening before the function is called.')
+        result = func(*args, **kwargs)
+        print('Something is happening after the function is called.')
+        return result
+    return wrapper
+
+@my_decoratordef say_hello():
+    print('Hello!')
+
+say_hello()
+
+# 2. Decorators with Arguments
+def decorator_with_args(arg1, arg2):
+    def actual_decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            print(f'Arguments passed to decorator: {arg1}, {arg2}')
+            result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return actual_decorator
+
+@decorator_with_args('arg1', 'arg2')
+def my_function():
+    print('I am decorated!')
+
+my_function()
+
+# Kafka
+
+- Trouble shooting
+
+    It looks like your Kafka server is still trying to connect to Zookeeper, even though you want to use *KRaft mode* (which does not require Zookeeper). This issue happens when Kafka is not properly configured to use KRaft.
+
+    ### *Steps to Fix It:*
+
+    ### *1. Stop Kafka*
+
+    Run the following command to stop Kafka if it's running:
+
+
+    pkill -f kafka
+
+
+
+    Or if you're using systemctl:
+
+
+    sudo systemctl stop kafka
+
+
+
+    Check if Kafka is still running:
+
+
+    ps aux | grep kafka
+
+
+
+    If you see Kafka processes, kill them manually:
+
+
+    kill -9 <PID>
+
+
+
+    ---
+
+    ### *2. Delete Old Data (Zookeeper & Logs)*
+
+    Since Kafka is still looking for Zookeeper, we need to *clean up old configurations and logs*.
+
+
+    rm -rf /tmp/kafka-logs
+    rm -rf /tmp/zookeeper
+    rm -rf /tmp/kraft-combined-logs
+
+
+
+    ---
+
+    ### **3. Check Kafka Configuration (server.properties)**
+
+    Make sure your Kafka is properly set up for KRaft mode.
+
+    Edit your Kafka configuration file:
+
+
+    nano /usr/local/kafka/config/kraft/server.properties
+
+
+
+    Ensure these *Zookeeper-related settings are removed or commented out*:
+
+
+    # DO NOT USE ZOOKEEPER IN KRAFT MODE
+    # zookeeper.connect=localhost:2181  <--- REMOVE THIS LINE
+
+
+
+    Ensure these *KRaft settings are correctly configured*:
+
+
+    process.roles=controller,broker
+    node.id=1
+    controller.quorum.voters=1@localhost:9093
+    listeners=PLAINTEXT://localhost:9092,CONTROLLER://localhost:9093
+    advertised.listeners=PLAINTEXT://localhost:9092
+    log.dirs=/tmp/kraft-combined-logs
+
+
+
+    Save and exit (CTRL + X, then Y, then Enter).
+
+    ---
+
+    ### *4. Reformat the Kafka Storage Directory*
+
+    Since you deleted old log data, you must *reformat the storage directory*.
+
+    Generate a new *cluster ID*:
+
+
+    export CLUSTER_ID=$(/usr/local/kafka/bin/kafka-storage.sh random-uuid)
+    echo "Cluster ID: $CLUSTER_ID"
+
+
+
+    Format the storage:
+
+
+    /usr/local/kafka/bin/kafka-storage.sh format -t $CLUSTER_ID -c /usr/local/kafka/config/kraft/server.properties
+
+
+
+    ---
+
+    ### *5. Restart Kafka in KRaft Mode*
+
+    Start Kafka *without Zookeeper*:
+
+
+    /usr/local/kafka/bin/kafka-server-start.sh -daemon /usr/local/kafka/config/kraft/server.properties
+
+
+
+    Check if Kafka is running:
+
+
+    ps aux | grep kafka
+
+
+
+    Check Kafka logs to verify there are no errors:
+
+
+    cat /usr/local/kafka/logs/kafka.log
+
+
+
+    ---
+
+    ### *6. Verify Kafka is Working*
+
+    Run the following to check if Kafka is running correctly:
+
+
+    /usr/local/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+
+
+
+    If everything is set up correctly, you should NOT see any Zookeeper-related errors.
+
+    ---
+
+    ### *Summary*
+
+    ✅ *Stopped Kafka & deleted old data*
+
+    ✅ *Removed Zookeeper settings*
+
+    ✅ *Configured Kafka for KRaft mode*
+
+    ✅ *Reformatted Kafka storage*
+
+    ✅ *Restarted Kafka & verified it's working*
+
+    Now, Kafka should be running properly in *KRaft mode* without Zookeeper! 🚀
+
+
+### Clear up Kafka
+
+rm -rf /tmp/kafka-logs
+
+### Format a Kraft
+
+bin/kafka-storage.sh format -t 5OD4qfAoSzKHvq5_I_812g -c config/kraft/server.properties
+
+
+### Start Kafka
+
+bin/kafka-server-start.sh -daemon config/server.properties
+bin/kafka-server-start.sh config/server.properties
+bin/kafka-server-start.sh config/server.properties
+
+### Stop Kafka
+
+bin/kafka-server-stop.sh
+
+### Create topic
+
+bin/kafka-topics.sh --create --topic news_articles --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+bin/kafka-topics.sh --create --topic processed_news_results --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+### List topics
+
+bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+
+### Produce
+
+bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092
+
+### Consume
+
+bin/kafka-console-consumer.sh --topic processed_news_results --from-beginning --bootstrap-server localhost:9092
+
+### Deleting a topic
+
+bin/kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic processed_news_results
+
+# GCP
+
+[Install the gcloud CLI  |  Google Cloud CLI Documentation](https://cloud.google.com/sdk/docs/install)
+
+# EFK
+kubectl delete namespace logging
+kubectl create namespace logging
+helm install elasticsearch elastic/elasticsearch --namespace=logging
+helm install fluentd fluent/fluentd --namespace=logging   --set fluentd.enabled=true   --set elasticsearch.host=elasticsearch.logging.svc.cluster.local   --set elasticsearch.port=9200
+helm install kibana elastic/kibana --namespace=logging --set service.type=LoadBalancer
+helm install kibana bitnami/kibana --namespace=logging --set service.type=LoadBalancer
+kubectl get events -n logging --sort-by='.lastTimestamp'
+
+# K8s
+
+[Deploy Apache Kafka - K8s using Charmhub - The Open Operator Collection](https://charmhub.io/kafka-k8s/docs/t-setup-environment)
+
+### Connect to VM in VPC
+
+gcloud compute ssh --zone "us-central1-a" "forward" --project "newsbias-438816"
+
+## install kubectl
+sudo apt-get install kubectl
+sudo apt-get install google-cloud-cli-gke-gcloud-auth-plugin
+
+### Connect to K8s on GCP
+
+gcloud container clusters get-credentials k8s --region us-central1
+
+gcloud compute instances create forward --network=k8s-net --machine-type=f1-micro --zone=us-central1-a --subnet=k8s-subnet
+gcloud compute ssh forward --zone=us-central1-a -- -N -L 8443:10.0.0.2:443
+
+kubectl get nodes --server=https://localhost:443
+
+1. *How to automate Kubernetes deployment:* Emphasizes understanding the DevOps flow, involving code check-in, containerization (using tools like Jenkins, CodeBuild, GitLab), image storage, and deployment via Helm or kubectl apply.
+2. *How to secure Kubernetes applications:* Highlights application security (*RBAC*, *IRSA*) and DevSecOps (authorization with IAM, vulnerability scanning of container images using tools like Sysdig Falco), plus security compliance like FedRAMP.
+3. *How to cost and performance optimize Kubernetes:* Identifies worker node costs as the primary area for optimization, with unused CPU and memory allocations being the key issue. Recommends using tools like *CloudWatch* Container Insights and Kubecost to detect waste and adjust pod resource specifications.
+4. *Tell me about a challenge you faced in Kubernetes:* Suggests discussing challenges like upgrading Kubernetes versions on EKS, maintaining application availability during the process, and how managed node groups can solve this. Also mentions IP address exhaustion in VPCs as an alternate challenge.
+5. *How to scale Kubernetes:* Explains horizontal pod autoscaling (HPA) and cluster autoscaling and mentions cluster over-provisioning (using pause pods) for latency-sensitive applications.
+6. *How to expose a Kubernetes microservice to consumers:* Recommends using Ingress (with options like Traefik or Nginx Ingress Controller) instead of just LoadBalancer services, to manage multiple services through a single entry point based on URL paths.
+7. *Do you have to use Kubernetes to run containerized applications?:* The answer is no. Highlights that Kubernetes is one of many container orchestrators, with alternatives like Amazon ECS, Docker Swarm, and Apache Mesos.
+
+The video provides practical tips and real-world scenarios to help interviewees demonstrate their hands-on experience with Kubernetes. It also recommends other videos for basic Kubernetes concepts.
+
+Sources
+[1] watch?v=OvOQJba-edM https://www.youtube.com/watch?v=OvOQJba-edM
+
+# Terraform
+
+### Installation
+
+https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
+
+[Terraform Registry](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started)
+
+## Configure Credentials
+
+
+
+export GOOGLE_APPLICATION_CREDENTIALS="newsbias-438816-f30fe5f0627d.json"
+
+---
+
+### *1️⃣ Deploy an Empty Kubernetes Cluster on GCP*
+
+This step sets up *Google Kubernetes Engine (GKE) on Google Cloud*.
+
+### *Step 1: Terraform Script to Create GKE Cluster*
+
+Create a file **main.tf**:
+
+hcl
+provider "google" {
+  project = "your-gcp-project-id"
+  region  = "us-central1"
+}
+
+resource "google_container_cluster" "primary" {
+  name     = "my-gke-cluster"
+  location = "us-central1"
+
+  initial_node_count = 3  # Number of nodes (adjust as needed)
+
+  node_config {
+    machine_type = "e2-medium"
+  }
+}
+
+
+### *Step 2: Apply Terraform*
+
+terraform init
+terraform apply -auto-approve
+
+
+🔹 **This creates an "empty" Kubernetes cluster**—no apps deployed yet.
+
+---
+
+### *2️⃣ Connect to the Kubernetes Cluster*
+
+Once the cluster is ready, configure kubectl:
+
+gcloud container clusters get-credentials backend-k8s-cluster --region us-central1 --project your-gcp-project-id
+
+
+Check if the cluster is running:
+
+kubectl get nodes
+
+
+---
+
+### *3️⃣ Deploy Your Application in Kubernetes*
+
+Now that you have an *empty Kubernetes cluster*, you can start deploying your *Kafka-based Spark streaming app* and other services.
+
+### *Step 1: Build & Push Your Docker Image*
+
+Since Kubernetes runs containers, you need to *package your app in a Docker image* and push it to Google Container Registry (GCR):
+
+docker build -t gcr.io/your-gcp-project-id/news-processor:latest .
+docker push gcr.io/your-gcp-project-id/news-processor:latest
+
+
+### *Step 2: Deploy Kafka (If Needed)*
+
+Since your app uses *Kafka*, install Kafka inside Kubernetes:
+
+helm repo add bitnami <https://charts.bitnami.com/bitnami>
+helm install kafka bitnami/kafka
+
+
+Get the Kafka service name:
+
+kubectl get svc
+
+
+🔹 Use this Kafka service name in your *KAFKA_BROKER* environment variable.
+
+---
+
+### *4️⃣ Deploy Your News Processing App*
+
+Once Kafka is running, deploy your *Spark Streaming Kafka Consumer*.
+
+### **Create a deployment.yaml File:**
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: news-processor
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: news-processor
+  template:
+    metadata:
+      labels:
+        app: news-processor
+    spec:
+      containers:
+        - name: news-processor
+          image: gcr.io/your-gcp-project-id/news-processor:latest
+          env:
+            - name: KAFKA_BROKER
+              value: "kafka.default.svc.cluster.local:9092"
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "500m"
+
+
+### *Apply the Deployment:*
+
+kubectl apply -f deployment.yaml
+
+
+---
+
+### *5️⃣ Expose Your Service*
+
+If you need to expose the app externally, create a *service.yaml*:
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: news-processor-service
+spec:
+  selector:
+    app: news-processor
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
+
+
+Apply it:
+
+kubectl apply -f service.yaml
+
+
+---
+
+### *6️⃣ Monitor & Verify*
+
+- Check deployed pods:
+
+kubectl get pods
+
+
+- See logs:
+
+kubectl logs -l app=news-processor
+
+
+- Check Kafka messages:
+
+kubectl exec -it kafka-0 -- kafka-console-consumer.sh --bootstrap-server kafka-service:9092 --topic processed_news_results --from-beginning
+
+
+---
+
+### *✅ Summary*
+
+1. *Deploy an empty Kubernetes cluster using Terraform* ✅
+2. **Connect to the cluster (kubectl)** ✅
+3. *Deploy Kafka inside Kubernetes* ✅
+4. *Deploy your Kafka-based Spark streaming app* ✅
+5. *Expose the service if needed* ✅
+6. *Monitor logs and ensure everything is running* ✅
+
+---
+
+###*🚀 Next Steps**
+
+Would you like help with:
+
+- *Autoscaling* your Spark jobs?
+- *Terraform for Kafka* setup?
+- *CI/CD for automatic deployment?*
+
+Let me know! 😊
+
+# Linux
+
+The questions covered include:
+
+1. How to check the kernel version (uname -a).
+2. How to find the current IP address ( ifconfig ip addr show).
+3. How to check free disk space (df -ah).
+4. How to see if a service is running (systemctl status service_name or service service_name status).
+5. How to check the size of a directory (du -sh).
+6. How to check for open ports (netstat -tulnp).
+7. How to check Linux process information (CPU usage, memory, etc.) (ps aux | grep process_name or top).
+8. How to deal with mounts in Linux (mount command).
+9. less /etc/fstab see startup mounts
+10. Importance of reading the manual pages (man command).
+
+The video also advises on preparing for other tech aspects (databases, networking, programming, cloud) depending on the specific role and recommends consulting man pages, Google, and Stack Overflow for finding answers, along with following the "How to ask questions the smart way" guidelines.
+
+Sources
+[1] watch?v=l0QGLMwR-lY https://www.youtube.com/watch?v=l0QGLMwR-lY
+
+# PostgreSQL
+
+[PostgreSQL command line cheatsheet](https://gist.github.com/Kartones/dd3ff5ec5ea238d4c546)
+
+[PostgreSQL Cheat Sheet & Quick Reference](https://quickref.me/postgres.html)
+
+CREATE TABLE news_bias_results (
+    id SERIAL PRIMARY KEY,         -- Auto-incrementing primary key
+    url VARCHAR(2048) NOT NULL,     -- URL of the news article (length of 2048 chars for long URLs)
+    model VARCHAR(50) NOT NULL,    -- Model used for bias analysis
+    result VARCHAR(255) NOT NULL,    -- Result of the model (e.g., "biased", "neutral")
+    bias_score FLOAT NOT NULL,      -- The bias score calculated by the model
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp when record was created
+);
+
+
+# Docker
+
+[Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+
+# *Education*
+
+### *1. How did you fare in high school mathematics, physical sciences, and computing? Which were strengths and which were most enjoyable? How did you rank, competitively, in them?*
+
+In high school, I excelled in mathematics and physical sciences, consistently ranking in the *top 10%* of my class. Mathematics was one of my strongest subjects—I enjoyed tackling complex problems and applying logical reasoning to find elegant solutions.
+
+I also developed a strong interest in programming, which allowed me to combine creativity with technical skills. The problem-solving aspect of programming, along with the opportunity to create and innovate, made it one of the most enjoyable subjects for me. I worked on small programming projects using *Python*, such as building a basic web scraper, which deepened my understanding of algorithms and logic.
+
+My performance in these subjects was reflected in my college entrance exam, where I achieved a perfect score in Math, securing a place at *National Taiwan University*, the top university in Taiwan. This achievement was a testament to my dedication and love for learning, particularly in STEM fields.
+
+### *2. Which degree and university did you choose, and why?*
+
+I pursued a *Bachelor of Science in Engineering Science at National Taiwan University (NTU)*, one of Asia’s most prestigious institutions, renowned for its rigorous academic standards and cutting-edge research. I was drawn to the program’s interdisciplinary approach, which allowed me to explore a wide range of fields, from electrical engineering to computer science. This experience not only honed my mathematical and programming skills but also ignited my passion for solving complex, real-world problems through technology. It was during this time that I realized my ambition to build innovative software solutions that drive meaningful impact.
+
+To further advance my expertise, I pursued a *Master of Science in Information Management at the University of Illinois, Urbana-Champaign*, a global leader in technology and data science education. This program provided me with the tools to master advanced programming, system modeling, and scalable solution design. During my studies, I focused intensely on *data engineering*, specializing in distributed data processing, database administration, and the development of robust data infrastructure. My goal is to design and build reliable data platforms that empower the data science industry.
+
+### *3. What did you enjoy most about your time at university?*
+
+What I enjoyed most about my time at university was the *collaborative environment* and the opportunity to *apply theoretical knowledge to real-world problems*. I thrived on working with *students from diverse backgrounds* to tackle complex challenges, which broadened my perspective and enhanced my problem-solving skills.
+
+One of the highlights was leading a team to *win first place* in a business competition, where I collaborated with students from the social sciences and business departments. My technical expertise complemented their strategic insights, resulting in a well-rounded solution that impressed the judges. Another memorable achievement was forming a team to *secure second place* in a nationwide data science competition, where we developed an innovative data-driven solution that stood out among hundreds of participants.
+
+These experiences allowed me to contribute *technical expertise* while learning from other domains, fostering a culture of mutual growth and innovation. They not only enriched my academic journey but also honed my ability to *collaborate effectively in diverse teams*, a skill I continue to value and apply in my professional career.
+
+### *4. Outside of class, what were your interests and where did you spend your time?*
+
+Outside of class, I was deeply engaged in *data analytics competitions*, where I sharpened my problem-solving and analytical skills by tackling complex, real-world datasets. These competitions challenged me to think critically and apply advanced techniques in data processing and machine learning, solidifying my ability to derive actionable insights from data.
+
+I also gained valuable industry experience through internships at companies like *ChargeSPOT* and *Line Taxi*, where I applied my technical knowledge to solve practical business challenges. These roles provided me with hands-on exposure to software development, data analysis, and the deployment of scalable solutions, bridging the gap between academia and industry.
+
+Beyond competitions and internships, I dedicated significant time to building software using *open-source tools*, which fueled my passion for innovation and continuous learning. I explored cutting-edge technologies, such as *cloud computing* and the *automated deployment of large language model (LLM) applications*, to stay at the forefront of the tech industry.
+
+These experiences not only deepened my technical expertise but also ignited my passion for combining *software engineering* and *data science* to build impactful products.
+
+### *5. What did you achieve at university that you consider exceptional?*
+
+During my undergraduate years, I achieved significant success through my research work at the Interdisciplinary Data Science & Signal Processing Laboratory at National Taiwan University. My most notable accomplishment was developing an innovative *stock price movement forecasting system* that combined traditional technical analysis with advanced natural language processing:
+
+- Successfully integrated financial news analysis with technical indicators for predictive modeling
+- Achieved *70% accuracy* in price movement predictions, demonstrating the model's practical value
+- Implemented *state-of-the-art NLP techniques*, including *BERT* and *multi-head attention* mechanisms
+- Enhanced text processing capabilities through the innovative use of *word embeddings*
+- Gained experience in handling and processing *large-scale financial data*
+
+# *Context*
+
+### *1. Describe your experience with Data Platform technology (e.g., PostgreSQL, MySQL, MongoDB, Kafka, Elasticsearch, Redis, etc.)*
+
+I have extensive experience working with various data platform technologies, including:
+
+- *PostgreSQL and Redis*: During my internship at Camping World, I optimized a customer propensity model API by redesigning the database architecture and integrating Redis for caching. This improved API response times by 500%.
+- *Kafka*: In my *News Bias Detector* project, I used Kafka for real-time data streaming, enabling parallel processing of news articles by multiple AI models (GPT, Claude, Gemini). This ensured high-throughput message delivery and fault tolerance.
+- *MongoDB*: I have experience building replica sets and implementing automatic backup mechanisms for NoSQL databases, ensuring data integrity and reliability.
+- Implemented *Prometheus/Grafana* for cluster health monitoring and the *EFK Stack* (Elasticsearch, Fluentd, Kibana) for centralized logging, reducing troubleshooting time by *30%*.
+
+### *2. Give details of your practical experience with Kubernetes, and with container-based operations in general*
+
+- Deployed and managed a *Flask-based News Bias Detection API* using *Kubernetes* and *Docker*, orchestrating multi-replica deployments to handle variable workloads.
+- Designed *horizontal autoscaling policies* to dynamically adjust replicas based on traffic, ensuring *99.9% uptime* and efficient resource utilization.
+- Optimized CPU/memory allocation via *Kubernetes resource requests/limits*, reducing infrastructure costs by *20%*.
+- Automated CI/CD pipelines using *GitHub Actions*, integrating with Kubernetes to streamline deployments and cut release time by *50%*.
+- Secured sensitive API keys (e.g., OpenAI) using *Kubernetes Secrets*, eliminating exposure in code or version control systems.
+- Configured *Ingress controllers* and service discovery to enable seamless internal/external communication across frontend/backend services.
+
+### *3. Have you had any involvement in the Cloud Native community, or contributed to any related projects?*
+
+While I haven’t yet contributed directly to the Cloud Native community, I’ve been deeply immersed in cloud-native technologies through my hands-on work with *Google Cloud Platform (GCP)*. For example, I’ve deployed and managed containerized applications using *Google Kubernetes Engine (GKE)*, leveraging Kubernetes to orchestrate scalable, resilient systems. These experiences have not only solidified my understanding of cloud-native principles—such as scalability, automation, and fault tolerance—but also fueled my passion for building innovative, open-source solutions.
+
+I’m an avid learner and have been actively exploring projects like *Kubernetes* and *Istio*, diving into their architectures and contribution workflows to understand how they power modern distributed systems. I’ve been following the *Cloud Native Computing Foundation (CNCF)* ecosystem closely, reading documentation, attending webinars, and experimenting with tools like *Prometheus* and *Argo CD*.
+
+What excites me most is the opportunity to deepen my involvement in the Cloud Native community and contribute to Canonical’s mission of advancing open-source innovation. I’m particularly drawn to the challenge of building automation and distributed systems that solve real-world problems at scale. I’m ready to bring my technical expertise, curiosity, and enthusiasm to the table, and I can’t wait to make meaningful contributions that push the boundaries of what’s possible in cloud-native technology.
+
+### 4. Outline your thoughts on the challenges of operating a well-integrated and robust data platform
+
+1. *Data Integration*: Combining data from diverse sources while ensuring consistency and accuracy is complex due to schema mismatches, data quality issues, and synchronization latency. Implement *data governance policies* and use *ETL tools* like Apache Airflow to maintain data integrity and streamline integration workflows.
+2. *Scalability*: As data volumes grow, the platform must scale *horizontally* (adding nodes) and *vertically* (increasing resources) without performance degradation. Use *containerization* (Docker) and *orchestration* (Kubernetes) to enable dynamic scaling and efficient resource management.
+3. *Performance Optimization*: Ensuring fast query responses and low-latency processing requires optimizing database queries, indexing, caching, and minimizing pipeline bottlenecks. Leverage *Redis* for caching, implement *query optimization techniques*, and use *partitioning strategies* to balance speed and cost.
+4. *Reliability and Fault Tolerance*: Ensuring high availability and graceful failure recovery is essential for a robust platform. Implement *database replica sets*, *backup mechanisms*, and use *Kubernetes* for orchestration and resilience.
+5. *Real-Time Data Processing*: Supporting real-time analytics and streaming data requires managing event ordering, pressure, and low-latency processing. Use tools like *Apache Kafka* for event streaming and *Apache Beam* for exactly-once processing semantics, ensuring data consistency and flow.
+6. *Observability and Monitoring*: Maintaining visibility into platform health and performance is critical for proactive issue resolution. Integrate *Prometheus* (time-series database) and *Grafana* (visualization) for monitoring, and use the *EFK Stack* (Elasticsearch, Fluentd, Kibana) for centralized logging and analysis.
+
+### *5. What is your understanding of the core functionality for a software operator that drives, for example, a database?*
+
+I see a software operator—especially one managing a database—as a controller that continuously monitors and manages the system's state. Its core functionality typically includes:
+
+- *State Reconciliation*: Constantly comparing the actual state of the database with the desired state and taking corrective actions to bring them into alignment.
+- *Automation of Operational Tasks*: Handling routine activities such as provisioning, configuration, scaling, backups, and updates to minimize manual intervention.
+- *Event-Driven Control Loop*: Reacting to changes or failures by triggering appropriate responses, ensuring the system remains resilient and self-healing.
+- *Integration and Observability*: Interfacing with the underlying infrastructure and providing logging and monitoring to maintain visibility over the system’s health.
+
+### *6. Why do you most want to work for Canonical?*
+
+As a developer with years of programming experience, I have spent countless hours using the Ubuntu Linux system, from my first algorithm course to my latest deep learning project. This has given me a deep appreciation and respect for Canonical’s contributions to the open-source community. As I transitioned to developing on cloud platforms, I became even more drawn to Canonical’s commitment to *open-source innovation* and its leadership in *cloud-native technologies*. I admire the company’s focus on creating robust, scalable solutions that empower developers and organizations worldwide. Working at Canonical would allow me to contribute to cutting-edge projects while growing as an engineer and making a meaningful impact on the future of technology.
+
+# *Engineering Experience*
+
+### *1. What kinds of software projects have you worked on before? Which operating systems, development environments, languages, and databases?*
+
+I have worked on a variety of software projects, leveraging my expertise in distributed systems, cloud infrastructure, and data platforms. These are my most relevant projects:
+
+*1. News Bias Detector*
+
+- *Description:* Developed a browser extension that uses AI models (e.g., GPT, Claude, Gemini) to analyze news articles for political bias.
+- *Key Contributions:*
+    - Deployed the backend on *Google Cloud Platform (GCP)* using *Kubernetes* for orchestration and *Kafka* for real-time data streaming.
+    - Designed an *event-driven architecture* to handle high-throughput data streams, ensuring scalability and fault tolerance.
+    - Utilized *PostgreSQL* to store news and scoring data, leveraging its robust querying capabilities and data integrity features.
+- *Technologies Used:* Kubernetes, Kafka, Flask, Docker, GCP, PostgreSQL.
+- *Operating Systems:* Linux (Ubuntu), macOS.
+- *Development Environments:* VS Code, PyCharm.
+- *Languages:* Python, JavaScript.
+
+---
+
+*2. Customer Propensity Model API with ETL Pipeline*
+
+- *Description:* Optimized a customer propensity model API to improve response times and scalability.
+- *Key Contributions:*
+    - Optimized a *PostgreSQL* database and integrated *Redis* for caching, improving API response times by *500%*.
+    - Implemented complex queries and indexing strategies to enhance database performance, supporting millions of customer records.
+    - Built an ETL pipeline using *Apache Beam* to process and load data into the database efficiently.
+- *Technologies Used:* PostgreSQL, Redis, Python, Apache Beam, GCP.
+- *Operating Systems:* Linux (Ubuntu), Windows.
+- *Development Environments:* Jupyter Notebook, VS Code.
+- *Languages:* Python, SQL.
+
+---
+
+*3. Stock Price Forecasting System*
+
+- *Description:* Developed a stock price forecasting system combining technical analysis with natural language processing (NLP).
+- *Key Contributions:*
+    - Integrated financial news analysis with traditional technical indicators using deep learning models (e.g., BERT, multi-head attention).
+    - Achieved *70% accuracy* in predicting stock price movements.
+    - Processed and stored large datasets using *Pandas* and *NumPy*, with results persisted in a *SQLite* database for lightweight, efficient storage.
+- *Technologies Used:* PyTorch, BERT, Pandas, NumPy, Jupyter Notebook, SQLite.
+- *Operating Systems:* Linux (Ubuntu), macOS.
+- *Development Environments:* Jupyter Notebook, VS Code.
+- *Languages:* Python.
+
+---
+
+*4. Database Administration*
+
+- *Description:* Managed and optimized database systems for high availability, security, and performance.
+- *Key Contributions:*
+    - *MongoDB Replica Sets:* Created and managed replica sets using Azure virtual machines to ensure high availability and fault tolerance. Configured automatic failover and data replication to minimize downtime.
+    - *Role-Based Access Control (RBAC):* Implemented role-based authentication and authorization to secure database access.
+    - *Backup and Recovery:* Designed and automated backup strategies using *MongoDB's native tools* and *Azure Blob Storage* to ensure data integrity and quick recovery.
+    - *Performance Optimization:* Monitored and optimized database performance by analyzing query execution plans, creating indexes, and tuning configurations.
+- *Technologies Used:* MongoDB, Azure, Bash, Python.
+- *Operating Systems:* Linux (Ubuntu), Windows.
+- *Development Environments:* VS Code, MongoDB Compass.
+- *Languages:* Python, Bash, JavaScript (for MongoDB scripting).
+
+### *2. Give details of your Python software development experience to date. How would you rate your competency with Python?*
+
+I have extensive experience in Python development, particularly in building scalable, automated, and data-driven solutions. I would rate my Python competency as *advanced*, given my hands-on experience with complex projects and my ability to write clean and efficient Python code. Below are some key examples of my Python experience:
+
+- Used *PySpark* for parallel data processing, achieving *99.9% uptime* and improving data throughput by *25%*.
+- Wrote Python scripts to manage *Kafka* producers and consumers, ensuring fault-tolerant event streaming.
+- Built RESTful APIs using *Flask* and *FastAPI* for various projects, including backend services for mobile and web applications.
+- Performed data preprocessing, model training, and evaluation with *PyTorch*, *TensorFlow*, *Pandas*, and *NumPy*.
+- Implemented Python container orchestration with *Docker* and *Kubernetes* to streamline deployment and scalability.
+
+### *3. Which project or piece of software are you most proud of, and why?*
+
+I am most proud of the *News Bias Detector browser extension*, a project I’m currently developing. This project combines my passion for solving real-world problems with my technical expertise in *distributed systems*, *data processing*, and *cloud infrastructure*. Here’s why this project stands out:
+
+*Problem Solving and Innovation*:
+
+- The News Bias Detector helps users identify potential biases in news articles by analyzing content using AI models (e.g., GPT, Claude, Gemini). This addresses a critical need in today’s information-driven world, where media bias can significantly impact public perception.
+- I designed the system to handle real-time data streaming and processing, ensuring users receive instant feedback while browsing news articles.
+
+*Technical Implementation*:
+
+- Leveraging my experience from my internship at Camping World, I hosted the product on *Google Cloud Platform (GCP)* and implemented industry best practices for scalability, reliability, and cost efficiency.
+- To handle real-time data processing, I integrated *Kafka* for event streaming, enabling asynchronous communication and handling *1,000+ messages per second* with fault tolerance and low latency. Kafka facilitates asynchronous communication between the browser extension, AI models, and the backend, ensuring smooth data flow and fault tolerance.
+- I containerized the backend services using *Docker* and orchestrated them with *Kubernetes*. This allowed me to:
+    - Automatically scale services based on traffic.
+    - Manage resource allocation efficiently.
+    - Ensure high availability and fault tolerance.
+- I integrated multiple AI models (GPT, Claude, Gemini) to analyze news content. This required building a robust pipeline to preprocess data, invoke models, and aggregate results in real time.
+- I also implemented *CI/CD pipelines* using *GitHub Actions* to automate testing and deployment, ensuring rapid iteration and high-quality releases.
+
+### *4. Give details of any experience you have with automated provisioning tools, configuration management, and infrastructure-as-code tools*
+
+I have extensive hands-on experience with *Terraform* as my primary Infrastructure-as-Code (IaC) tool. Below are the details of my experience:
+
+- I have used Terraform to manage infrastructure on *GCP*, creating modular and reusable Terraform configurations to deploy virtual machines, storage, networking, and other cloud resources.
+- I have implemented Terraform to automate the setup of complex, fault-tolerant distributed systems, such as *Kafka clusters* and *Spark environments*.
+- I have applied Terraform to automate the deployment of *Kubernetes*, *PostgreSQL*, and *MongoDB*.
+- I have integrated Terraform with CI/CD pipelines to enable automated testing and deployment.
+
+### *5. How comprehensive is your knowledge of Linux, from the kernel up? How familiar are you with low-level system architecture, runtimes, packaging, and command-line tooling?*
+
+- I have a solid understanding of the Linux kernel's architecture, including process management, memory management, file systems, and device drivers.
+- I have worked with kernel parameters in sysctl.conf to tune system behavior, such as network performance and memory allocation.
+- I have used tools like perf to diagnose kernel-level issues.
+- I understand the Linux boot process in detail, including BIOS/UEFI, bootloaders, kernel initialization, and systemd or init systems.
+- I have worked with low-level hardware components, such as storage devices, network interfaces, and GPUs, using lspci.
+- I am familiar with concepts like virtual memory, paging, and swapping, and I have used htop to monitor system performance.
+- I am proficient with package managers (apt, dpkg, yum, and snap).
+- I have resolved dependency issues and conflicts, ensuring smooth installation and operation of software.
+- I am highly proficient with core Linux commands like grep, awk, sed, find, and rsync for text processing, file management, and automation.
+- I have written advanced shell scripts (Bash) to automate system administration tasks, such as backups, log rotation, and monitoring.
+- I have used tools like ip, netstat, and iptables to view network configurations.
+- I have managed users, groups, and permissions using tools like useradd, usermod, and ACLs.
+- I have configured and analyzed system logs using syslog.
+
+### *6. Describe your experience with public cloud-based operations. How well do you understand large-scale public cloud estate management and developer experience?*
+
+- *Data Analytics & Storage:* Utilized *BigQuery* for advanced data analytics and *Cloud Storage* for scalable, cost-effective data storage solutions.
+- *ETL Automation:* Designed and implemented an automated ETL pipeline using *DataFlow*, processing over 2 million rows of data daily with high reliability and efficiency.
+- *Database Management:* Managed PostgreSQL databases on *CloudSQL*, ensuring optimal performance and scalability for critical data operations.
+- *Automation & Triggers:* Developed triggers on *Cloud Run* to automate PostgreSQL table creation and transitions, streamlining data workflows and reducing manual intervention.
+- *Network Security:* Configured and managed *VPC* settings to ensure secure networks and IP management.
+- *Infrastructure Setup:* Deployed and maintained *Compute Engine* instances, ensuring seamless resource availability for diverse workloads.
+- *Cost Optimization:* Conducted *cost management analysis*, evaluating trade-offs between managed services and custom VM solutions to optimize cloud spending without compromising performance.
+- *CI/CD:* Enhanced team productivity by implementing *CI/CD pipelines* and leveraging *Cloud Source Repositories* for version control and continuous integration.
+- *Access Control:* Managed user roles and permissions using *IAM*, ensuring secure and granular access to cloud resources.
+
+### *7. Outline your thoughts on quality in software development. What practices are most effective to drive improvements in quality?*
+
+- Maintaining detailed *documentation*, including references, diagrams, and inline code comments. I personally use *Lucid* for diagrams and *GitHub Pages* for detailed documentation.
+- Conducting thorough *code reviews* by others to ensure high-quality standards.
+- Implementing *CI/CD pipelines*, which includes automating the build, test, and deployment processes.
+- Adding *unit tests*, *integration tests*, and *end-to-end tests* to validate individual components, system interactions, and user workflows. For my personal projects, I leverage *doc-test* to ensure that my code meets the highest standards, and I use *PyCharm debugging tools* to identify and fix issues during development.
+
+### *8. Outline your thoughts on documentation in software projects. What practices should teams follow? What are great examples of open-source docs?*
+
+- Maintain documentation alongside the source code using *Git*.
+- Use *MkDocs* to generate documentation from code comments and markdown files.
+- Organize content with headings, bullet points, and diagrams for clarity.
+- Follow style guides to ensure consistency across the documentation.
+- Integrate documentation updates into the development workflow. For example, require documentation updates in pull requests to ensure it stays current with code changes.
+- Host documentation on platforms like *GitHub Pages* to make it publicly accessible and searchable. Personally, I like to use *Notion* to keep my notes organized and publish the documentation on *GitHub* for my team.
+- Include a search function and menu for easy navigation.
+
+I found these documentations really helpful throughout my learning:
+
+1. *PyTorch Documentation* ([Link](https://pytorch.org/docs/stable/index.html))
+2. *Docker Documentation* ([Link](https://docs.docker.com/manuals/))
+3. *GitHub Documentation* ([Link](https://docs.github.com/en/get-started))
+
+Dear Hiring Team,
+
+Thank you for considering my application. I am genuinely excited about the opportunity to contribute to Canonical's mission of advancing open-source innovation and delivering world-class automation solutions. I am confident that my experience aligns well with the requirements of this position, and I look forward to discussing how my skills can support Canonical's data platform initiatives and contribute to their continued success.

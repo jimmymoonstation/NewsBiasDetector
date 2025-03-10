@@ -1,3 +1,5 @@
 
 extension/backend/keys.py
 extension/backend/__pycache__/keys.cpython-312.pyc
+extension/backend/rater/keys.py
+extension/backend/.terraform/providers/registry.terraform.io/hashicorp/google/6.24.0/linux_386/terraform-provider-google_v6.24.0_x5
