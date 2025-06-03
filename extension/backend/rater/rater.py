@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json
 from pyspark.sql.types import StringType, StructType, StructField
@@ -8,7 +9,7 @@ import anthropic
 from openai import OpenAI
 from keys import *
 from kafka import KafkaProducer
-
+import redis
 # 🔹 Initialize AI Models
 os.environ["OPENAI_API_KEY"] = OPENAIKEY
 gpt = OpenAI()
@@ -21,14 +22,14 @@ gemini = genai.GenerativeModel("gemini-1.5-flash")
 
 # 🔹 Kafka Configuration (Ensure Kafka is in KRaft Mode)
 KAFKA_BROKER = "localhost:9092"
-TOPIC_NAME = "news_articles"
-OUTPUT_TOPIC = "processed_news_results"  # New topic for the processed results
-
+TOPIC_NAME = "scraped_news_articles"
+OUTPUT_TOPIC = "rated_news_articles"  # New topic for the processed results
+REDIS_HOST = 'localhost'
 # 🔹 Initialize Spark Session
 spark = SparkSession.builder \
     .appName("NewsBiasProcessing") \
     .config("spark.sql.streaming.schemaInference", "true") \
-    .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.1").getOrCreate()  # Use the correct version for your setup
+    .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1").getOrCreate()  # Use the correct version for your setup
 
 # 🔹 Initialize Kafka Producer
 producer = KafkaProducer(bootstrap_servers=KAFKA_BROKER, value_serializer=lambda v: json.dumps(v).encode('utf-8'))
@@ -60,7 +61,11 @@ def rate(news_content, model, temperature=0):
        - 2 = Far-right bias
        - 0 = Neutral
        Wrap the score with !$*_& like this: !$*_&score!$*_&
-
+    The output format should be strictly like this. No explanation after score:
+    <Explanation>
+    --------
+    !$*_&<score>!$*_&
+    
     Here is the news content:
     \"\"\"{news_content}\"\"\"
     """
@@ -84,6 +89,8 @@ def rate(news_content, model, temperature=0):
         elif model == 'gemini':
             response = gemini.generate_content(prompt)
             return prompt, response.text
+        elif model == 'dummy':
+            return prompt, f'dummy: {news_content}'
     except Exception as e:
         print(f"Error calling {model}: {e}")
         return prompt, "Error processing article."
@@ -97,17 +104,21 @@ def process_article(batch_df, batch_id):
 
         if news_content and model:
             _, result = rate(news_content, model)
+            explanation = result.split('--------')[0]
             score = parse_score(result)
             print(f"\n📰 Processed Article: {url}\n🔹 Bias Score: {score}\n")
 
             # Prepare the result to send to Kafka
             result_data = {
+                "status": "rated",
                 "url": url,
                 "model": model,
-                "result": result,
+                "result": explanation,
                 "score": score
             }
-
+            # Update Redis
+            r = redis.Redis(host=REDIS_HOST, port=6379, decode_responses=True)
+            r.hset(url, mapping = result_data)
             # Send the processed result to the Kafka topic
             producer.send(OUTPUT_TOPIC, value=result_data)
             print(f"📤 Sent result to Kafka topic: {OUTPUT_TOPIC}")
@@ -117,7 +128,7 @@ kafka_options = {
     "kafka.bootstrap.servers": KAFKA_BROKER,  # Replace with your Kafka broker
     "subscribe": TOPIC_NAME,               # Replace with your Kafka topic
     "startingOffsets": "earliest",           # Optionally define how to start consuming messages,
-    "group_id":'article_processing'
+    # "group_id":'article_processing'
 
 }
 

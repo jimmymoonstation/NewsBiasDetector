@@ -1,10 +1,14 @@
-<<<<<<< Updated upstream
-const server = 'http://127.0.0.1:5000/api/scrape'
+
+const server = 'http://127.0.0.1:5000/api/click'
 //const server = "https://newsbias-detect-tool-96460072068.us-central1.run.app/api/scrape";
 
+//const server = 'http://127.0.0.1:5000/api/scrape'
+//const server = "https://newsbias-detect-tool-96460072068.us-central1.run.app/api/scrape";
+//const server = "https://newsbiasdetector-96460072068.us-central1.run.app/api/scrape"
 // Function to fetch data from the backend
 async function fetchData(model) {
     try {
+        document.getElementById('result').innerText = `loading...`;
         // Get the current tab
         const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
         if (tabs.length === 0) {
@@ -30,7 +34,7 @@ async function fetchData(model) {
 
         // Update the DOM with the received data
         document.getElementById('model').innerText = `Model: ${model}`;
-        document.getElementById('result').innerText = `Paragraphs: ${data.result}`;
+        document.getElementById('result').innerText = `${data.result}`;
     } catch (error) {
         console.error('Error fetching data:', error);
         document.getElementById('data').innerText = `Failed to fetch data: ${error.message}`;
